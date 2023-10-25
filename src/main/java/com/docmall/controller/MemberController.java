@@ -1,5 +1,6 @@
 package com.docmall.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,11 @@ public class MemberController {
 		log.info("called...join");
 	}
 	
-	//비동기방식. ajax문법으로 호출
+	// 비동기방식. ajax문법으로 호출
+	// 아이디 중복체크
+	// ResponseEntity클래스?httpentity를 상속받는, 결과 데이터와 HTTP상태 코드를 직접 제어할수 있는
+	// 3가지 구성요소 - HttpStatus, HttpHeaders, HttpBody
+	// ajax기능과 함께 사용
 	
 	@GetMapping("/idcheck")
 	public ResponseEntity<String> idcheck(String mbsp_id) {
@@ -37,6 +42,14 @@ public class MemberController {
 		
 		
 		//서비스 메서드 호출구문작업.
+		String idUse = "";
+		if(memberService.idcheck(mbsp_id) != null) {
+			idUse = "no"; //아이디가 존재하여, 사용불가능
+		}else {
+			idUse = "yes"; //아이디가 존재하지않아, 사용가능
+		}
+		
+		entity = new ResponseEntity<String>(idUse, HttpStatus.OK);
 		
 		return entity;
 	}

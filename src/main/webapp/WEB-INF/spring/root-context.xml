@@ -21,13 +21,15 @@
 	<!-- 서버 배포용 
 		<property name="driverClassName" value="oracle.jdbc.OracleDriver"></property>
 		<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
-		-->
-
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
 		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe"/>
+		-->
+
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver"></property>
+		<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
 		<!-- 공통 -->
-		<property name="username" value="ora_user"></property>
-		<property name="password" value="1234"></property>
+		<property name="username" value="spring"></property>
+		<property name="password" value="spring"></property>
 	</bean>	
 	
 	
