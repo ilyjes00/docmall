@@ -37,6 +37,14 @@
       }
     </style>
 
+    <script>
+      let msg = '${msg}';
+      if(msg != "") {
+      alert(msg);
+      }
+
+      </script>
+
     
     <!-- Custom styles for this template -->
     <link rel="stylesheet">
@@ -58,8 +66,8 @@
   <div class="mb-4"></div>
     <div class="mb-4"></div>
 
-<form role="form" id="joinForm" method="post" action="/member/join">
-<div class="box-body">
+<form role="form" id="loginform" method="post" action="/member/login">
+<di class="box-body">
 <div class="form-group">
 <form>
   <div class="form-group row">
@@ -67,80 +75,20 @@
     <div class="col-sm-8">
       <input type="text" class="form-control" id="mbsp_id" name="mbsp_id" placeholder="Enter ID">
     </div>
-    <div class="col-sm-2">
-    <button type="button" class="btn btn-outline-info" id="idcheck">중복확인</button>
-    </div>
   </div>
-      <div class="form-group row">
+  <div class="form-group row">
     <label for="mbsp_password" class="col-sm-2 col-form-label">비밀번호</label>
-    <div class="col-sm-10">
-      <input type="password" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="Enter password">
-    </div>
-  </div>
-      <div class="form-group row">
-    <label for="mbsp_password2" class="col-sm-2 col-form-label">비밀번호 확인</label>
-    <div class="col-sm-10">
-      <input type="password" class="form-control" id="mbsp_password2"  placeholder="Enter password">
-    </div>
-  </div>
-    <div class="form-group row">
-    <label for="mbsp_name" class="col-sm-2 col-form-label">이름</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="mbsp_name" name="mbsp_name" placeholder="Enter Name">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="mbsp_email" class="col-sm-2 col-form-label">이메일</label>
     <div class="col-sm-8">
-      <input type="email" class="form-control" id="mbsp_email" name="mbsp_email" placeholder="Enter email">
+      <input type="password" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="Enter PW">
     </div>
-    <div class="col-sm-2">
-      <button type="button" class="btn btn-outline-info" id="mailAuth">메일인증</button>
     </div>
   </div>
-  <div class="form-group row">
-    <label for="mbsp_id" class="col-sm-2 col-form-label">메일인증</label>
-    <div class="col-sm-8">
-      <input type="text" class="form-control" id="authCode" name="authCode" placeholder="Enter ID">
+  <div class="box-footer">
+    <button type="submit" class="btn btn-primary" id="btnlogin">로그인</button>
     </div>
-    <div class="col-sm-2">
-    <button type="button" class="btn btn-outline-info" id="btnConfirmAuth">인증확인</button>
-    </div>
-  </div>
-    <div class="form-group row">
-    <label for="sample2_postcode" class="col-sm-2 col-form-label">우편번호</label>
-    <div class="col-sm-8">
-      <input type="text" class="form-control" id="sample2_postcode" name="mbsp_zipcode" placeholder="Enter zipcode">
-    </div>
-    <div class="col-sm-2">
-     <button type="button" onclick="sample2_execDaumPostcode()" class="btn btn-outline-info">우편변호찾기</button>
-     </div>
-  </div>
-    <div class="form-group row">
-    <label for="sample2_address" class="col-sm-2 col-form-label">주소</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="sample2_address" name="mbsp_addr" placeholder="Enter addr">
-    </div>
-  </div>
-    <div class="form-group row">
-    <label for="sample2_detailAddress" class="col-sm-2 col-form-label">상세주소</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="sample2_detailAddress" name="mbsp_deaddr" placeholder="Enter deaddr">
-      <input type="hidden" id="sample2_extraAddress" placeholder="참고항목">
-    </div>
-  </div>
-  
-    <div class="form-group row">
-    <label for="mbsp_phone" class="col-sm-2 col-form-label">전화번호</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="mbsp_phone" name="mbsp_phone" placeholder="Enter phonenumber">
-    </div>
-  </div>
-</form>
+ </form>
+ </div>
 
-<div class="box-footer">
-<button type="submit" class="btn btn-primary" id="btnJoin">Submit</button>
-</div>
 </form>
 </div>
 

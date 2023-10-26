@@ -2,6 +2,7 @@ package com.docmall.service;
 
 import org.springframework.stereotype.Service;
 
+import com.docmall.domain.MemberVO;
 import com.docmall.mapper.MemberMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -18,5 +19,17 @@ public class MemberServiceImpl implements MemberService {
 	public String idcheck(String mbsp_id) {
 		// TODO Auto-generated method stub
 		return memberMapper.idcheck(mbsp_id);
+	}
+
+	@Override
+	public void join(MemberVO vo) {
+		// TODO Auto-generated method stub
+		memberMapper.join(vo);
+	}
+
+	@Override
+	public MemberVO login(String mbsp_id) {
+		// TODO Auto-generated method stub
+		return memberMapper.login(mbsp_id);
 	}
 }

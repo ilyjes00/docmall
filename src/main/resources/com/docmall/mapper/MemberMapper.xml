@@ -2,9 +2,37 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
   <mapper namespace="com.docmall.mapper.MemberMapper">
+   
   	
   	<select id="idcheck" parameterType="String" resultType="String">
   		SELECT MBSP_ID FROM MBSP_TBL WHERE MBSP_ID = #{mbsp_id}
+  	</select>
+  	
+	<insert id="join" parameterType="com.docmall.domain.MemberVO">
+  	 	INSERT iNTO MBSP_TBL(MBSP_ID, MBSP_NAME, MBSP_EMAIL, MBSP_PASSWORD, MBSP_ZIPCODE, MBSP_ADDR, MBSP_DEADDR, MBSP_PHONE)
+		VALUES(#{mbsp_id},#{mbsp_name},#{mbsp_email},#{mbsp_password},#{mbsp_zipcode},#{mbsp_addr},#{mbsp_deaddr},#{mbsp_phone})
+  	</insert>
+  	
+  	<select id="login" parameterType="String" resultType="com.docmall.domain.MemberVO">
+  	SELECT
+ 		MBSP_DEADDR,
+ 		MBSP_ID,
+ 		MBSP_EMAIL,
+ 		MBSP_NAME,
+ 		MBSP_PASSWORD,
+ 		MBSP_PHONE,
+ 		MBSP_ADDR,
+ 		MBSP_ZIPCODE,
+ 		MBSP_PASSWORD,
+ 		MBSP_LASTLOGIN,
+ 		MBSP_POINT,
+ 		MBSP_DATESUB,
+ 		MBSP_UPDATEDATE
+ 		    FROM
+ 		    	MBSP_TBL
+ 		    WHERE
+ 		    	MBSP_ID = #{mbsp_id}	  		  		  		  		  		
   	</select>
   </mapper>

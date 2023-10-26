@@ -6,10 +6,17 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/*
+ 
+ - 주요상요되는 기능
+ - 회원가입, 회원수정 폼, 회원 수정하기
+ - db회원테이블에서 정보를 읽어올때
+ * */
+
 @ToString
 @Setter
 @Getter
-public class MemverVO {
+public class MemberVO {
 
 	/*CREATE TABLE mbsp_tbl(
         mbsp_id             VARCHAR2(15),
