@@ -32,4 +32,24 @@ public class MemberServiceImpl implements MemberService {
 		// TODO Auto-generated method stub
 		return memberMapper.login(mbsp_id);
 	}
+
+	@Override
+	public void modify(MemberVO vo) {
+		// TODO Auto-generated method stub
+		memberMapper.modify(vo);
+	}
+
+	@Override
+	public void loginTimeUpdate(String mbsp_id) {
+		
+		memberMapper.loginTimeUpdate(mbsp_id);
+		
+	}
+
+	@Override
+	public void delete(String mbsp_id) {
+		
+		memberMapper.delete(mbsp_id);
+		
+	}
 }

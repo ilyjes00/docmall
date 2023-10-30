@@ -37,6 +37,14 @@
       }
     </style>
 
+    <script>
+      let msg = '${msg}';
+      if(msg != "") {
+      alert(msg);
+      }
+
+      </script>
+
     
     <!-- Custom styles for this template -->
     <link rel="stylesheet">
@@ -52,14 +60,14 @@
   <div class="text-center">
   <div class="box box-primary">
 <div class="box-header with-border">
-<h1 class="box-title">회원가입</h3>
+<h1 class="box-title">회원수정 인증확인</h3>
 </div>
  <div class="mb-4"></div>
   <div class="mb-4"></div>
     <div class="mb-4"></div>
 
-<form role="form" id="joinForm" method="post" action="/member/join">
-<div class="box-body">
+<form role="form" id="confirmPwform" method="post" action="/member/delete">
+<di class="box-body">
 <div class="form-group">
 <form>
   <div class="form-group row">
@@ -67,80 +75,20 @@
     <div class="col-sm-8">
       <input type="text" class="form-control" id="mbsp_id" name="mbsp_id" placeholder="Enter ID">
     </div>
-    <div class="col-sm-2">
-    <button type="button" class="btn btn-outline-info" id="idcheck">중복확인</button>
-    </div>
   </div>
-      <div class="form-group row">
+  <div class="form-group row">
     <label for="mbsp_password" class="col-sm-2 col-form-label">비밀번호</label>
-    <div class="col-sm-10">
-      <input type="password" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="Enter password">
-    </div>
-  </div>
-      <div class="form-group row">
-    <label for="mbsp_password2" class="col-sm-2 col-form-label">비밀번호 확인</label>
-    <div class="col-sm-10">
-      <input type="password" class="form-control" id="mbsp_password2"  placeholder="Enter password">
-    </div>
-  </div>
-    <div class="form-group row">
-    <label for="mbsp_name" class="col-sm-2 col-form-label">이름</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="mbsp_name" name="mbsp_name" placeholder="Enter Name">
-    </div>
-  </div>
-  <div class="form-group row">
-    <label for="mbsp_email" class="col-sm-2 col-form-label">이메일</label>
     <div class="col-sm-8">
-      <input type="email" class="form-control" id="mbsp_email" name="mbsp_email" placeholder="Enter email">
+      <input type="password" class="form-control" id="mbsp_password" name="mbsp_password" placeholder="Enter PW">
     </div>
-    <div class="col-sm-2">
-      <button type="button" class="btn btn-outline-info" id="mailAuth">메일인증</button>
     </div>
   </div>
-  <div class="form-group row">
-    <label for="mbsp_id" class="col-sm-2 col-form-label">메일인증</label>
-    <div class="col-sm-8">
-      <input type="text" class="form-control" id="authCode" name="authCode" placeholder="Enter ID">
+  <div class="box-footer">
+    <button type="submit" class="btn btn-danger" id="btnlogin">탈퇴하기</button>
     </div>
-    <div class="col-sm-2">
-    <button type="button" class="btn btn-outline-info" id="btnConfirmAuth">인증확인</button>
-    </div>
-  </div>
-    <div class="form-group row">
-    <label for="sample2_postcode" class="col-sm-2 col-form-label">우편번호</label>
-    <div class="col-sm-8">
-      <input type="text" class="form-control" id="sample2_postcode" name="mbsp_zipcode" placeholder="Enter zipcode">
-    </div>
-    <div class="col-sm-2">
-     <button type="button" onclick="sample2_execDaumPostcode()" class="btn btn-outline-info">우편변호찾기</button>
-     </div>
-  </div>
-    <div class="form-group row">
-    <label for="sample2_address" class="col-sm-2 col-form-label">주소</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="sample2_address" name="mbsp_addr" placeholder="Enter addr">
-    </div>
-  </div>
-    <div class="form-group row">
-    <label for="sample2_detailAddress" class="col-sm-2 col-form-label">상세주소</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="sample2_detailAddress" name="mbsp_deaddr" placeholder="Enter deaddr">
-      <input type="hidden" id="sample2_extraAddress" placeholder="참고항목">
-    </div>
-  </div>
-  
-    <div class="form-group row">
-    <label for="mbsp_phone" class="col-sm-2 col-form-label">전화번호</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control" id="mbsp_phone" name="mbsp_phone" placeholder="Enter phonenumber">
-    </div>
-  </div>
-</form>
+ </form>
+ </div>
 
-<div class="box-footer">
-<button type="submit" class="btn btn-primary" id="btnJoin">Submit</button>
-</div>
 </form>
 </div>
 
@@ -251,114 +199,9 @@
     // 자바스크립트 이벤트 등록 : https://www.w3schools.com/js/js_htmldom_eventlistener.asp
     $(document).ready(function() {
 
-      let useIDCheck = false // 아이디 중복체크 사용유무
+  
+        });
       
-      //document.getElementById("idcheck")
-    	$("#idcheck").click(function() {
-       // alert("아이디 중복체크");
-       if($("#mbsp_id"). val() ==="") {
-        alert("아이디를 입력하세요.");
-        $("#mbsp_id").focus();
-        return;
-       }
-
-       //아이디 중복체크
-       $.ajax({
-        url : '/member/idcheck',
-        type : 'get',
-        dataType : 'text',
-        data : {mbsp_id : $("#mbsp_id").val()},
-        success: function(result) {
-          if(result == "yes") {
-            alert("아이디 사용가능");
-            useIDCheck = true;
-          }else {
-            alert("아이디 사용불가능");
-            useIDCheck = false;
-            $("#mbsp_id").val("");  //아이디 텍스트박스를 값을 지움
-            $("#mbsp_id").focus();  //포커스
-          }
-        }
-       });
-      });
-
-      //메일인증요청
-      $("#mailAuth").click(function() {
-        if($("#mbsp_email").val() == ""){
-        alert("이메일을 입력하세요.");
-        $("#mbsp_email").focus();
-      return;
-        }
-      
-      $.ajax({
-        url: '/email/authcode',
-        type: 'get',
-        dataType: 'text', //스프링에서 보내는 데이터의 타입 'success'
-        data: {receiverMail: $("#mbsp_email").val()},
-        success:function(result) {
-          if(result == "success"){
-            alert("인증메일이 발송되었습니다. 메일을 확인해주세요.")
-          }
-        }
-      });
-        });
-
-        let isConfirmAuth = false; //메일 인증을 안한 상태
-
-
-
-      // 인증확인   <button type="button" class="btn btn-outline-info" id="btnConfirmAuth">인증확인</button> 
-      	$("#btnConfirmAuth").click(function() {
-
-          if($("#authCode").val() == "") {
-            alert("인증코드를 입력하세요.");
-            $("#authCode").focus();
-            return;
-          }
-
-          //인증확인 요청
-          $.ajax({
-            url:'/email/confirmAuthcode',
-            type: 'get',
-            dataType: 'text',
-            data :  {authCode : $("#authCode").val()},
-            success: function(result) {
-              if(result == "success") {
-                alert("인증 성공");
-                isConfirmAuth = true;
-              }else if(result == "fail") {
-                alert('인증 실패');
-                $("#authCode").val("");
-                isConfirmAuth = false;
-              }else if(result == "request") {
-                alert('메일인증 요청을 다시 해주세요.');
-                $("#authCode").val("");
-                isConfirmAuth = false;
-              }
-            }
-          });
-
-        });
-
-        //<form role="form" id="joinForm" method="post" action="">
-          let joinForm = $("#joinForm");
-
-        $("#btnJoin").click(function() {
-
-          //회원가입 유효성검사
-          if(!useIDCheck) {
-            alert("아이디 중복체크 바랍니다.");
-            return
-          }
-
-          if(!isConfirmAuth) {
-            alert("메일인증 확인 바랍니다.");
-            return;
-          }
-
-          joinForm.submit();
-        });
-      }); 
     </script>
   </body>
 </html>
