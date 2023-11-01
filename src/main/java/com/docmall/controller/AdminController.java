@@ -53,6 +53,7 @@ public class AdminController {
 				session.setAttribute("adminStatus", db_vo); //이름이 중복되서는 절대로안된다.
 				
 				//로그인 시간 업데이트
+				adminService.login_Date(vo.getAdmin_id());
 
 				url = "/admin/admin_menu"; //메인페이지 주소
 			}else {
@@ -82,6 +83,7 @@ public class AdminController {
 		session.invalidate();
 		return "redirect:/admin/intro"; //로그인페이지 주소
 	}
+	
 	
 	
 	

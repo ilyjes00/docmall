@@ -34,6 +34,11 @@
             <!-- Menu toggle button -->
 			<a href="/admin/logout">로그아웃</a>
             </ul>
+                      <ul class="nav navbar-nav">
+          <li class="dropdown messages-menu">
+            <!-- Menu toggle button -->
+			<a href="/">[쇼핑몰]</a>
+            </ul>
 			</c:if>
       </div>
     </nav>
