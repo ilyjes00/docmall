@@ -2,6 +2,8 @@ package com.docmall.domain;
 
 import java.util.Date;
 
+import lombok.Data;
+
 /*
  CREATE TABLE PRODUCT_TBL(
         PRO_NUM             NUMBER  CONSTRAINT  PK_PRO_NUM         PRIMARY KEY,
@@ -22,7 +24,7 @@ import java.util.Date;
  */
 //pro_img, cg_code, pro_publisher, pro_price, pro_name, pro_num, pro_up_folder, pro_discount, pro_content, pro_buy, pro_amount, pro_date, pro_updatedate
 
-
+@Data
 public class ProductVO {
 	private Integer pro_num;
 	private Integer cg_code; //2차카테고리 코드
