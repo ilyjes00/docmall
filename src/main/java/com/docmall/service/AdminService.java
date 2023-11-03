@@ -8,4 +8,6 @@ public interface AdminService {
 	
 	void login_Date(String admin_id);
 	
+	
+	
 }
