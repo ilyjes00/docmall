@@ -8,6 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.coobird.thumbnailator.Thumbnailator;
@@ -109,5 +114,31 @@ public class FileUtils {
    
    
    return isImageType;
+   
    }
+   
+   //프로젝트 외부폴더에서 관리되고있는 상품이미지를 브라우저의<img src="매핑주소"> 이미지태그로 부터 요청이 들어왔을 때 바이트배열로 보내는 주소작업.
+   //String uploadPath : 업로드 폴더경로
+   //String FileName : 날짜폴더경로를 포함한 파일명(db)
+   //ResponseEntity 클래스 - 1)헤더(header) 2)바디(body) - 데이터3)상태코드
+   public static ResponseEntity<byte[]> getFile(String uploadPath, String fileName) throws Exception {
+	   
+	   ResponseEntity<byte[]> entity = null;
+	   
+	   File file = new File(uploadPath, fileName);
+	   
+	   //파일이 해당경로에 존재하지앙ㄶ으면
+	   if(!file.exists()) {
+		   return entity;	//null로 리턴
+	   }
+	   
+	   //1)header
+	   HttpHeaders headers = new HttpHeaders();
+	   headers.add("content-Type", Files.probeContentType(file.toPath()));
+	   
+	   entity = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file),headers,HttpStatus.OK);
+	   
+	   return entity;
+   }
+   
 }

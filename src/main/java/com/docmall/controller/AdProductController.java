@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -81,7 +83,7 @@ public class AdProductController {
       //2)상품정보 저장
       adProductService.pro_insert(vo);
 
-      return "redirect:/pro_list";
+      return "redirect:/admin/product/pro_list";
    }
    
    //CKEDITOR에서 업로드탭에서 파일업로드 동작하는 매핑주소
@@ -154,6 +156,10 @@ public class AdProductController {
    @GetMapping("/pro_list")
    public void pro_list(Criteria cri, Model model) throws Exception {
 	   
+	   
+	   //10 -> 2
+	    cri.setAmount(2);
+	   
 		List<ProductVO> pro_list = adProductService.pro_list(cri);
 		
 		//날짜폴더의 역슬래시를 슬래시로 바꾸는 작업, 역슬래시로 되어있는 정보가 스프링으로 보내는 요청데이터에 사용되면 에러발생.
@@ -167,5 +173,12 @@ public class AdProductController {
 		model.addAttribute("pageMaker", new PageDTO(cri, totalcount));
    }
    
+   //상품리스트에서 보여줄이미지, <img src="매핑주소">
+   @ResponseBody
+   @GetMapping("/imageDisplay")
+   public ResponseEntity<byte[]> imageDisplay(String dateFolderName, String fileName)throws Exception {
+	   
+	   return FileUtils.getFile(uploadPath + dateFolderName, fileName);
+   }
 
 }
