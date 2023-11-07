@@ -96,7 +96,7 @@ desired effect
                         
                           </select>
                         </td>
-                        <td><button class="btn btn-primary" type="button">수정</button></td>
+                        <td><button class="btn btn-primary" type="button" name="btn_edit">수정</button></td>
                         <td><button class="btn btn-danger" type="button">삭제</button></td>
                         </tr>
                         </c:forEach>
@@ -106,7 +106,7 @@ desired effect
                         <div class="box-footer clearfix">
                           <div class="row">
                              <div class="col-md-2">
-                                <button type="button" class="btn btn-primary" id="btn_check_modify" role="button">체크상품수정</button>   
+                                <button type="button" class="btn btn-primary" id="btn_check_modify2" role="button">체크상품수정</button>   
                              <!--1)페이지번호 클릭할 때 사용  [이전]  1   2   3   4   5 [다음]  -->
                              <!--2)목록에서 상품이미지 또는 상품명 클릭할 때 사용   -->
                                <form id="actionForm" action="" method="get">
@@ -114,7 +114,6 @@ desired effect
                                 <input type="hidden" name="amount"  id="amount" value="${pageMaker.cri.amount}" />
                                 <input type="hidden" name="type" id="type" value="${pageMaker.cri.type}" />
                                 <input type="hidden" name="keyword" id="keyword" value="${pageMaker.cri.keyword}" />
-                                <input type="hidden" name="pro_num" id="pro_num" />
                                </form>
                              </div>
                              <div class="col-md-8 text-center">
@@ -145,7 +144,7 @@ desired effect
                                 </ul>
                                 </nav>
                              </div>
-                             <div class="col-md-2 text-right"><button type="button" class="btn btn-primary"  role="button">상품등록</button></div>
+                             <div class="col-md-2 text-right"><button type="button" class="btn btn-primary" id="btn_pro_insert"  role="button">상품등록</button></div>
                           </div>
                           
                        </div>
@@ -169,7 +168,6 @@ desired effect
                           <input type="hidden" name="amount" id="amount" value="${pageMaker.cri.amount }" />
                           <input type="hidden" name="type" id="type" value="${pageMaker.cri.type }" />
                           <input type="hidden" name="keyword" id="keyword" value="${pageMaker.cri.keyword }" />
-                          <input type="hidden" name="pro_num" id="pro_num" />
                         </form>
                       </div>
                     </div>
@@ -306,8 +304,8 @@ $("#checkAll").on("click", function() {
 });
 
 
-   //체크박스 수정상태클릭
-   $("#btn_check_modify").on("click", function(){
+   //체크박스 수정1 상태클릭
+   $("#btn_check_modify2").on("click", function(){
     //체크박스 유무확인
     if($("input[name='check']").length == 0) {
     alert("수정할 상품을 체크하세요.");
@@ -328,9 +326,50 @@ $("#checkAll").on("click", function() {
     console.log("상품코드" , pro_num_arr);
     console.log("상품코드" , pro_price_arr);
     console.log("상품코드" , pro_buy_arr);
+
+    $.ajax({
+    url: '/admin/product/pro_checked_modify2',
+    type: 'post',
+    data: {pro_num_arr: pro_num_arr, pro_price_arr: pro_price_arr, pro_buy_arr: pro_buy_arr},
+    dataType: 'text',
+    success: function(result) {
+      if(result == "success") {
+        alert("체크상품이 수정되었습니다.");
+
+        //db에서 다시불러오는 작업
+        //1) location.href = "/admin/product/pro_list"
+        //2) 현재 리스트 상태로 불러오는 의미
+        /*
+        actionForm.attr("method","get");
+        actionForm.attr("action","/admin/product/pro_list");
+        actionForm.submit();
+        */
+      }
+      }
+   });   
    });
+   //상품등록
+   $("#btn_pro_insert").on("click", function(){
+    location.href = "/admin/product/pro_insert";
+  });
+
+  //상품수정
+  $("button[name='btn_edit']").on("click", function(){
+    //수정상품코드
+    let pro_num = $(this).parent().parent("tr").find("input[name='check']").val();
+
+    console.log(pro_num);
+
+    //<input type="hidden" name="pro_num" id="pro_num" value="24"/>
+
+    actionForm.append('<input type="hidden" name="pro_num" id="pro_num" value="' + pro_num + '" />');
 
 
+    actionForm.attr("method","get");
+        actionForm.attr("action","/admin/product/pro_edit");
+        actionForm.submit();
+  });
+  //ready 이벤트
   });
 </script>
 </body>
