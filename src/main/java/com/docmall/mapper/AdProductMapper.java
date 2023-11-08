@@ -29,5 +29,9 @@ public interface AdProductMapper {
 
 	ProductVO pro_edit(Integer pro_num);
 	
-	CategoryVO get(Integer cg_code);
+	//상품수정
+	void pro_edit_ok(ProductVO vo);
+
+	//상품삭제
+	void pro_delete(Integer pro_num);
 }

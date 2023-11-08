@@ -65,7 +65,22 @@ desired effect
               <div class="box">
                 <div class="box-header with-border">
                   <h3 class="box-title">Product List</h3>
-                    </div>						
+                    </div>				
+                    <div class="col-6">
+                    <form action="/admin/product/pro_list" method="get">
+                      <select name="type">
+                        <option selected>검색종류선택</option>
+                        <option value="N" ${pageMaker.cri.type == 'N'? 'selected': ''}>상품명</option>
+                        <option value="C"${pageMaker.cri.type == 'C'? 'selected': ''}>상품코드</option>
+                        <option value="P"${pageMaker.cri.type == 'P'? 'selected': ''}>제조사</option>
+                        <option value="NP"${pageMaker.cri.type == 'NP'? 'selected': ''}>상품명 or 제조사</option>
+                        </select>
+                        <input type="text" name="keyword" value="${pageMaker.cri.keyword }" />
+                        <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }" />
+                        <input type="hidden" name="amount" value="${pageMaker.cri.amount }" />
+                        <button type="submit" class="btn btn-dark">검색</button>
+                      </form>		
+                      </div>
                         <div class="box-body">
                         <table class="table table-bordered">
                         <tbody><tr>
@@ -85,7 +100,7 @@ desired effect
                         <td>
                         
                         <a class="move" href="#" data-bno="${productVO.pro_num }"><img src="/admin/product/imageDisplay?dateFolderName=${productVO.pro_up_folder }&fileName=s_${productVO.pro_img }"></a>
-                        <a class="move" href="#" data-bno="${productVO.pro_num }">${productVO.pro_name }</a>  
+                        <a class="move pro_name" href="#" data-bno="${productVO.pro_num }">${productVO.pro_name }</a>  
                         </td>
                         <td><input type="text" name="pro_price" value="${productVO.pro_price }"></td>
                         <td><fmt:formatDate value="${productVO.pro_date}" pattern="yyyy-MM-dd" /></td>
@@ -96,8 +111,8 @@ desired effect
                         
                           </select>
                         </td>
-                        <td><button class="btn btn-primary" type="button" name="btn_edit">수정</button></td>
-                        <td><button class="btn btn-danger" type="button">삭제</button></td>
+                        <td><button class="btn btn-primary" type="button" name="btn_pro_edit">수정</button></td>
+                        <td><button class="btn btn-danger" type="button" name="btn_pro_del">삭제</button></td>
                         </tr>
                         </c:forEach>
                         </tbody></table>								
@@ -149,19 +164,7 @@ desired effect
                           
                        </div>
                       <div class="col-6">
-                        <form action="/admin/product/pro_list" method="get">
-                        <select name="type">
-                          <option selected>검색종류선택</option>
-                          <option value="N" ${pageMaker.cri.type == 'N'? 'selected': ''}>상품명</option>
-                          <option value="C"${pageMaker.cri.type == 'C'? 'selected': ''}>상품코드</option>
-                          <option value="P"${pageMaker.cri.type == 'P'? 'selected': ''}>제조사</option>
-                          <option value="NP"${pageMaker.cri.type == 'NP'? 'selected': ''}>상품명 or 제조사</option>
-                          </select>
-                          <input type="text" name="keyword" value="${pageMaker.cri.keyword }" />
-                          <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }" />
-                          <input type="hidden" name="amount" value="${pageMaker.cri.amount }" />
-                          <button type="submit" class="btn btn-dark">검색</button>
-                        </form>
+
                         <!-- [이전] 1 	2 	3	4	5	[다음] 페이지 이동목적으로 클릭할 때 사용-->
                         <form id="actionForm" action="" method="get">
                           <input type="hidden" name="pageNum" id="pageNum" value="${pageMaker.cri.pageNum }" />
@@ -354,11 +357,14 @@ $("#checkAll").on("click", function() {
   });
 
   //상품수정
-  $("button[name='btn_edit']").on("click", function(){
+  $("button[name='btn_pro_edit']").on("click", function(){
     //수정상품코드
     let pro_num = $(this).parent().parent("tr").find("input[name='check']").val();
 
     console.log(pro_num);
+
+    //뒤로가기 클릭후 다시 수정버튼 클릭시 코드 중복되는부분제거
+    actionForm.find("input[name='pro_num']").remove();
 
     //<input type="hidden" name="pro_num" id="pro_num" value="24"/>
 
@@ -369,6 +375,34 @@ $("#checkAll").on("click", function() {
         actionForm.attr("action","/admin/product/pro_edit");
         actionForm.submit();
   });
+  //상품삭제 , 화살표함수사용시 상품코드 접근불가능
+  /*
+    $(".btn_pro_del").on("click", () =>{
+    let pro_num = $(this).parent().parent().find("input[name='check']").val();
+    console.log("상품코드", pro_num);
+  })
+  */
+  $("button[name='btn_pro_del']").on("click", function(){
+
+    let pro_name = $(this).parent().parent().find(".pro_name").text();
+    if(!confirm(pro_name + " 상품을 삭제하시겠습니까?")) return;
+
+    let pro_num = $(this).parent().parent().find("input[name='check']").val();
+
+    console.log("상품코드", pro_num);
+
+
+//뒤로가기 클릭후 다시 수정버튼 클릭시 코드 중복되는부분제거
+    actionForm.find("input[name='pro_num']").remove();
+
+    actionForm.append('<input type="hidden" name="pro_num" id="pro_num" value="' + pro_num + '" />');
+
+    actionForm.attr("method","post");
+    actionForm.attr("action","/admin/product/pro_delete");
+    actionForm.submit();
+
+});
+
   //ready 이벤트
   });
 </script>

@@ -11,4 +11,5 @@ public interface AdCategoryMapper {
 	
 	List<CategoryVO> getSecondCategoryList(Integer cg_parent_code);
 	
+	CategoryVO get(Integer cg_code);
 }
