@@ -47,6 +47,7 @@
 
         <c:if test="${sessionScope.loginStatus != null }">
     <a class="p-2 text-white" href="/member/mypage">Mypage</a>
+    <a class="p-2 text-white" href="/user/Cart/cart_list">Cart</a>
     <a class="p-2 text-white" href="/admin/intro">[ADMIN]</a>
         </c:if> 
 </nav>
