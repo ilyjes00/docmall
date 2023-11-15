@@ -65,7 +65,6 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">상품</th>
-        <th scope="col">등록일</th>
         <th scope="col">상품명</th>
         <th scope="col">판매가</th>
         <th scope="col">수량</th>
@@ -87,7 +86,8 @@
         <td><input type="number" name="cart_amount" value="${cartDTO.cart_amount }" style="width: 35px;"><button type="button" name="btn_cart_amount_change" class="btn btn-danger">변경</button></td>
         <td><span id="unitDiscount">${cartDTO.pro_discount * 1/100 }</span></td>
         <td><span class ="unitTotalprice" id="unitTotalprice">${(cartDTO.pro_price - (cartDTO.pro_price * (cartDTO.pro_discount * 1/100))) * cartDTO.cart_amount}</span></td>
-        <td><button type="button" class="btn btn-danger">삭제하기</button></td>
+        <td><button type="button" name="btn_ajax_cart_del" class="btn btn-danger">삭제하기(ajax)</button></td>
+        <td><button type="button" name="btn_cart_del" class="btn btn-danger">삭제하기(non-ajax)</button></td>
       </tr>
       </c:forEach>
     </tbody>
@@ -98,6 +98,13 @@
       <tr>
         <td colspan="8">
           최종결제금액 : <span id="cart_total_price">${cart_total_price}</span>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="10" style="text-align: center">
+          <button type="button" name="btn_product" class="btn btn-primary">쇼핑계속하기</button> 
+          <button type="button" name="btn_cart_empty" class="btn btn-primary">장바구니 비우기</button> 
+          <button type="button" name="btn_order" class="btn btn-primary">주문하기</button>
         </td>
       </tr>
     </tfoot>
@@ -151,17 +158,63 @@
 
 
             //전체주문금액
-              let sumPrice = 0;
+            fn_cart_sum_price();
+          }
+        }
+      });
+
+    });
+          //장바구니 삭제 ajax
+          $("button[name='btn_ajax_cart_del']").on("click" , function() {
+
+            if(!confirm("장바구니 상품을 삭제하시겠습니까?")) return;
+
+            let cur_btn_delete = $(this); //선택된 버튼태그의 위치를 참조
+            let cart_code = $(this).parent().parent().find("input[name='cart_code']").val();
+        //console.log("장바구니코드", cart_code);
+
+            $.ajax({
+              url : '/user/Cart/cart_list_del',
+              type : 'post',
+              data : {cart_code : cart_code},
+              dataType : 'text',
+              success : function(result) {
+                if(result == "success"){
+                  alert("장바구니 상품이 삭제되었습니다.");
+
+                  cur_btn_delete.parent().parent().remove(); //삭제된 장바구니 데이터행 제거
+                }
+              }
+
+            });
+
+
+      });
+                  //장바구니삭제 non-ajax
+                  $("button[name='btn_cart_del']").on("click" , function() {
+
+                  if(!confirm("장바구니 상품을 삭제하시겠습니까?")) return;
+
+                  let cart_code = $(this).parent().parent().find("input[name='cart_code']").val();
+                  location.href = "/user/Cart/cart_list_del?cart_code=" + cart_code;
+});
+
+        //주문하기
+        $("button#btn_order").on("click", function(){
+          location.href = "/user/order/order_Info"
+        });
+    
+  });
+
+  function fn_cart_sum_price() {
+                //전체주문금액
+                let sumPrice = 0;
               $(".unitTotalprice").each(function() {
                sumPrice += Number($(this).text());
               });
               $("#cart_total_price").text(sumPrice);
           }
-        }
-      });
-    });
-    
-  });
+  
 
 </script>
 
