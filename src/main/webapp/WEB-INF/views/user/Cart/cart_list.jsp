@@ -102,9 +102,9 @@
       </tr>
       <tr>
         <td colspan="10" style="text-align: center">
-          <button type="button" name="btn_product" class="btn btn-primary">쇼핑계속하기</button> 
-          <button type="button" name="btn_cart_empty" class="btn btn-primary">장바구니 비우기</button> 
-          <button type="button" name="btn_order" class="btn btn-primary">주문하기</button>
+          <button type="button" id="btn_product" class="btn btn-primary">쇼핑계속하기</button> 
+          <button type="button" id="btn_cart_empty" class="btn btn-primary">장바구니 비우기</button> 
+          <button type="button" id="btn_order" class="btn btn-primary">주문하기</button>
         </td>
       </tr>
     </tfoot>
@@ -201,7 +201,7 @@
 
         //주문하기
         $("button#btn_order").on("click", function(){
-          location.href = "/user/order/order_Info"
+          location.href = "/user/order/order_info"
         });
     
   });
