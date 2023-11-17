@@ -16,6 +16,7 @@ import com.docmall.domain.OrderVO;
 import com.docmall.domain.PaymentVO;
 import com.docmall.dto.CartDTOList;
 import com.docmall.kakaopay.ReadyResponse;
+import com.docmall.mapper.OrderMapper;
 import com.docmall.service.CartService;
 import com.docmall.service.OrderService;
 
@@ -59,7 +60,38 @@ public class OrderController {
 	
 	//카카오 결제 선택을 진행했을경우
 	@GetMapping(value = "/orderPay", produces = "application/json")
-	public @ResponseBody ReadyResponse payReady(OrderVO O_vo, OrderDetailVO od_vo , PaymentVO p_vo, int totalamount, HttpSession session) throws Exception{
+	public @ResponseBody ReadyResponse payReady(String paymethod ,OrderVO o_vo, /*OrderDetailVO od_vo, PaymentVO p_vo */ int totalprice, HttpSession session) throws Exception{
+		
+		/*
+	      1)	-주문테이블(OrderVO) : odr_status,  payment_status 정보존재 안함.
+	      		-주문상세테이블(OrderDetailVO) :
+	      			-장바구니 테이블에서 데이터를 참조
+	      			-결제테이블 : 보류
+	      		
+	      		
+	      2)	카카오페이에 결제에 필요한 정보구성
+	           	스프링에서 처리할수 있는 부분
+		*/
+		
+		String mbsp_id = ((MemberVO) session.getAttribute("loginStatus")).getMbsp_id();
+		o_vo.setMbsp_id(mbsp_id); //아이디값 할당
+		
+
+		
+		
+		//	시퀀스를 주문번호로 사용: 동일한 주문번호값이 사용되야한다. 중요*
+		Long ord_code = (long) orderService.getOrderSeq();
+		o_vo.setOrd_code(ord_code); //주문번호저장
+		
+		log.info("결제방법: " + paymethod);
+		log.info("주문정보:" + o_vo);
+		//	1) 주문테이블 저장. odr_status,  payment_status 데이터 준비할 것.
+			
+		
+		//	2)주문상세테이블 저장
+		
+		
+		// 	3)kakao pay 호출
 		
 		return null;
 	}

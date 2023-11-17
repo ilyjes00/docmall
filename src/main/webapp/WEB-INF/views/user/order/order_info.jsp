@@ -87,8 +87,9 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="8" style="text-align: right;">
+        <colspan="8" style="text-align: right;">
           주문금액 : <span id="cart_total_price">${order_price}</span>
+          </colspan>
         </td>
       </tr>
     </tfoot>
@@ -194,15 +195,15 @@
       <div class="form-group row">
         <label for="mbsp_phone" class="col-2">결제방법</label>
         <div class="col-10">
-          <input type="radio" name="mbsp_phone" id="mbsp_phone">무통장 입금
-          <input type="radio" name="mbsp_phone" id="mbsp_phone"> <img src="/image/payment_icon_yellow_small.png">
+          <input type="radio" name="paymethod" id="paymethod1" value="nobank">무통장 입금
+          <input type="radio" name="paymethod" id="paymethod2" value="kakaopay"> <img src="/image/payment_icon_yellow_small.png">
         </div>
       </div>
       </fieldset>
       
       <div class="form-group row text-center">
         <div class="col-12">
-          <button type="button" class="btn btn-primary">주문및결제하기</button>
+          <button type="button" class="btn btn-primary" id="btn_order">주문및결제하기</button>
         </div>
       </div>
       </form>
@@ -328,6 +329,46 @@
         $("#mbsp_phone").val("");
       }
     });
+
+    //주문하기
+    $("#btn_order").on("click",function () {
+      
+      //1)주문테이블 , 주문상세테이블, 결제테이블에 저장에 필요한 정보구성
+      //2)카카오페이에 결제에 필요한 정보구성
+      //스프링에서 처리할수 있는 부분
+
+      console.log("paymethod", $("input[name='paymethod']:checked").val());
+      console.log("ord_name" , $("#mbsp_id").val());
+      console.log("ord_zipcode" , $("input[name='mbsp_zipcode']").val());
+      console.log("ord_addr_basic" , $("input[name='mbsp_addr']").val());
+      console.log("ord_addr_detail" , $("input[name='mbsp_deaddr']").val());
+      console.log("ord_tel" , $("#mbsp_phone").val());
+      console.log("ord_price" ,  $("#cart_total_price").text());
+      console.log("totalamount" , $("#cart_total_price").text());
+
+
+$.ajax({
+  url : '/user/order/orderPay',
+  type : 'get',
+  data : {
+    paymethod : $("input[name='paymethod']:checked").val(),
+    ord_name : $("#mbsp_id").val(),
+    ord_zipcode :  $("input[name='mbsp_zipcode']").val(),
+    ord_addr_basic :  $("input[name='mbsp_addr']").val(),
+    ord_addr_detail :  $("input[name='mbsp_deaddr']").val(),
+    ord_tel :  $("#mbsp_phone").val(),
+    ord_price :  1000,
+    totalprice :  1000,//$("#cart_total_price").text(),
+  },
+  dataType : 'json',
+  success : function(response) {
+
+  }
+
+});
+
+    });
+
   });
 </script>
 
