@@ -26,16 +26,18 @@ public class PaymentVO {
 	
 	//pay_code, ord_code, mbsp_id, pay_method, pay_date, pay_tot_price, pay_nobank_price, pay_rest_price, pay_nobank_user, pay_nobank, pay_memo
 	
+	//참조타입으로 작성시 400번에러를 피할수있다 ex -> int ->Integer로 변경해서 참조타입으로변경
+	
 	private Integer pay_code;
 	private Long 	ord_code;
 	private String 	mbsp_id;
 	private String	pay_method;
 	private Date 	pay_date;
-	private int 	pay_tot_price;
-	private int 	pay_nobank_price;
-	private int 	pay_rest_price;
+	private Integer pay_tot_price;		//int
+	private Integer pay_nobank_price;	//int
 	private String 	pay_nobank_user;
 	private String 	pay_nobank;
 	private String 	pay_memo;
+	private String 	pay_bankaccount;
 
 }

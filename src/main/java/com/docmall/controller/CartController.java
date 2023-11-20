@@ -63,12 +63,12 @@ public class CartController {
 		
 
 		
-			double cart_total_price = 0;
+		int cart_total_price = 0;
 		
 	      for(int i = 0 ; i<cart_list.size(); i++) {
 	          CartDTOList vo = cart_list.get(i);
 	          vo.setPro_up_folder(vo.getPro_up_folder().replace("\\", "/"));
-	          cart_total_price += ((double)vo.getPro_price() - (vo.getPro_price() * vo.getPro_discount() * 1/100 ))* vo.getCart_amount();
+	          cart_total_price += (vo.getPro_price() * vo.getCart_amount());
 	       }
 	
 		

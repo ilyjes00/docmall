@@ -26,4 +26,6 @@ public class OrderVO {
 	
 	private String ord_status;
 	private String payment_status;
+	
+
 }
