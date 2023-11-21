@@ -19,7 +19,15 @@
     <!-- Bootstrap core CSS -->
 <link href="https://getbootstrap.com/docs/4.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 <link rel="stylesheet" href="https://getbootstrap.com/docs/4.6/examples/pricing/pricing.css">
-
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $( "#tabs_pro_detail" ).tabs();
+  } );
+  </script>
 
     <!-- Favicons -->
 
@@ -39,6 +47,17 @@
           font-size: 3.5rem;
         }
       }
+      body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+table {
+	font-size: 1em;
+}
+
+.ui-draggable, .ui-droppable {
+	background-position: top;
+}
     </style>
 
     
@@ -52,40 +71,69 @@
 
 <%@include file="/WEB-INF/views/comm/category_menu.jsp" %>
 
-<%@include file="/WEB-INF/views/comm/slider.jsp" %>
 
 
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
 
   <h1 class="display-4"></h1>
-  <p>2차 카테고리:${cg_name }</p>
+  <p>2차 카테고리: ${cg_name }</p>
 </div>
 
 <div class="container">
-  <div class="card-deck mb-3 text-center row">
-  <c:forEach items="#{pro_list }" var="productVO"> 
-  <div class="col-md-3">
-          <div class="card mb-4 shadow-sm">
-           <img class="btn_pro_img" data-pro_num="${productVO.pro_num }" style="cursor: pointer;" src="/user/product/imageDisplay?dateFolderName=${productVO.pro_up_folder }&fileName=${productVO.pro_img }" width="100%" height="225">
-
-            <div class="card-body">
-              <p class="card-text btn_pro_img">${productVO.pro_name }</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" name="btn_cart_add" data-pro_num="${productVO.pro_num }" class="btn btn-sm btn-outline-secondary">Cart</button>
-                  <button type="button" name="btn_buy" class="btn btn-sm btn-outline-secondary">Buy</button>
-                </div>
-                <small class="text-muted">
-                <fmt:formatNumber type="currencyt" pattern="₩#, ###"> ${productVO.pro_price } </fmt:formatNumber> </small>
-              </div>
-            </div>
-        </div>
+  <di class="card-deck mb-3 text-center row">
+    <div class="col-md-6">
+      <img class="btn_pro_img" data-pro_num="${productVO.pro_num }" src="/user/product/imageDisplay?dateFolderName=${productVO.pro_up_folder }&fileName=${productVO.pro_img }" width="100%" height="225">
     </div>
-    </c:forEach>
+    <di class="col-md-6">
+      <div class="row text-left">
+        <div class="col">
+          ${productVO.pro_name }
+        </div>
+      </div>
+      <div class="row text-left">
+        <div class="col">
+          가격 : <span id="unit_price">${productVO.pro_price }</span>
+        </div>
+      </div>
+      <div class="row text-left">
+        <div class="col">
+        수량 <input type="number" id="btn_quantity" value="1" style="width: 80px;">
+        </div>
+      </div>
+      <div class="row text-left">
+        <div class="col">
+          총상품금액: <span id="tot_price">${productVO.pro_price }</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <button type="button" class="btn btn-primary" name="btn_order" data-pro_num="${productVO.pro_num }">구매하기</button>
+      </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-primary" name="btn_cart_add" data-pro_num="${productVO.pro_num }">장바구니</button>
+        </div>
+      </div>
+      </div>
     </div>
   </div>
-  
+  <div class="row">
+    <div class="col-md-12">
+      <div id="tabs_pro_detail">
+        <ul>
+          <li><a href="#tabs-prodetail">상품설명</a></li>
+          <li><a href="#tabs-proreview">상품후기</a></li>
+        </ul>
+        <div id="tabs-prodetail">
+          <p>${productVO.pro_content }</p>
+        </div>
+        <div id="tabs-proreview">
+          <p>상품후기</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container">
      <div class="row justify-content-end">
         <div class="col-md-7 text-center">
@@ -100,32 +148,7 @@
             <input type="hidden" name="cg_code" id="cg_code" value="${cg_code }" />
             <input type="hidden" name="cg_name" id="cg_name" value="${cg_name }" />
      </form>
-      <nav aria-label="...">
-      <ul class="pagination">
-         <!-- 이전 표시여부 -->
-         <c:if test="${pageMaker.prev }">
-            <li class="page-item">
-               <a href="${pageMaker.startPage - 1 }" class="page-link movepage">Previous</a>
-            </li>
-         </c:if>
-         <!-- 페이지번호 출력 -->
-         <!-- 1   2   3   4   5 6   7   8   9   10  [다음] -->
-         <!-- [이전] 11   12   13   14   15 16   17   18   19   20   -->
-         <c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="num">
-            <li class='page-item ${pageMaker.cri.pageNum ==  num ? "active":"" }'aria-current="page">
-               <a class="page-link movepage" href="${num }" data-page="${num }">${num }</a>
-            </li>
-         </c:forEach>
-         
-         <!--  다음 표시여부 -->
-         <c:if test="${pageMaker.next }">
-            <li class="page-item">
-            <a href="${pageMaker.endPage + 1 }" class="page-link movepage" href="#">Next</a>
-            </li>
-         </c:if>
-         
-      </ul>
-      </nav>
+
    </div>
 </div>
 </div>
@@ -133,7 +156,7 @@
 <%@include file="/WEB-INF/views/comm/footer.jsp" %>
 </div>
 
-<%@include file="/WEB-INF/views/comm/plugin.jsp" %>
+<%-- <%@include file="/WEB-INF/views/comm/plugin.jsp" %>  css파일부분 작동안함 jquery-3.6.0.js // 3.5.0버전과 충돌--%> 
 <script src="/js/category_menu.js"></script>
 
 <script>
@@ -160,7 +183,7 @@ $("button[name='btn_cart_add']").on("click", function() {
 	$.ajax({
     url: '/user/Cart/cart_add',
     type: 'post',
-    data: {pro_num : $(this).data("pro_num"), cart_amount : 1 },
+    data: {pro_num : $(this).data("pro_num"), cart_amount :  $("#btn_quantity").val()},
     dataType: 'text',
     success: function(result) {
       if(result === "success"){
@@ -172,6 +195,16 @@ $("button[name='btn_cart_add']").on("click", function() {
     }
   });
 });
+
+  //구매하기(주문)
+$("button[name='btn_order']").on("click" , function(){
+
+let url = "/user/order/order_ready?pro_num=" + $(this).data("pro_num") + "&cart_amount=" + $("#btn_quantity").val();
+location.href = url;
+});
+
+
+
     $(".btn_pro_img").on("click" , function() {
 
       let actionForm = $("#actionForm");
@@ -182,13 +215,24 @@ $("button[name='btn_cart_add']").on("click", function() {
       let pro_num = $(this).data("pro_num");
 
       actionForm.find("input[name='pro_num']").remove();
-      // <input type='hidden' name='pro_num' value='상품코드'>
+      // <input type='hidden' name='pro_num' value='상품코드'
       actionForm.append("<input type='hidden' name='pro_num' value='" + pro_num + "'>");
       actionForm.submit();
 
     });
- //ready event end
+
+    //수량변경시
+    $("#btn_quantity").on("change", function() {
+      let tot_price = parseFloat($("#unit_price").text()) * parseFloat($("#btn_quantity").val());
+
+
+      //총상품금액 표시
+      $("#tot_price").text(tot_price);
+    }); 
+    //ready event end
+
 </script>
+
 
   </body>
 </html>
