@@ -23,6 +23,32 @@
 <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+<script id="reviewTemplate" type="text/x-handlebars-template">
+  <table class="table table-sm">
+     <thead>
+        <tr>
+           <th scope="col">번호</th>
+           <th scope="col">리뷰내용</th>
+           <th scope="col">평점</th>
+           <th scope="col">날짜</th>
+           <th scope="col">비고</th>
+        </tr>
+     </thead>
+     <tbody>
+        {{#each .}}
+        <tr>
+           <th scope="row">{{rew_num}}</th>
+           <td>{{rew_content}}</td>
+           <td>{{convertRating rew_score}}</td>
+           <td>{{convertDate rew_regdate}}</td>
+           <td>{{authControlView mbsp_id rew_num}}</td>
+        </tr>
+        {{/each}}
+     </tbody>
+  </table>
+</script>
+
 <script>
   $( function() {
     $( "#tabs_pro_detail" ).tabs();
@@ -139,6 +165,16 @@ p#star_rv_score a.rv_score.on {
         </div>
         <div id="tabs-proreview">
           <p>상품후기 목록</p>
+          <div class="row">
+            <div class="col-md-12" id="review_list">
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6" id="review_paging">
+              
+            </div>
+          </div>
           <div class="row">
           <div class="col-md-12 text-right">
             <button type="button" id="btn_review_write" class="btn btn-primary" data-pro_num="${productVO.pro_num }">상품후기작성</button>
@@ -310,7 +346,176 @@ $(this).addClass("on").prevAll("a").addClass("on");
 
 let reviewPage = 1;     //목록에서 1번째 페이지를 의미
 //@GetMapping("/list/{pro_num}/{page}")
-let url = "/user/review/list" + 상품코드 + "/" +reviewPage;
+let url = "/user/review/list/" + "${productVO.pro_num }" + "/" +reviewPage;
+
+getReviewInfo(url);
+
+function getReviewInfo(url) {
+  $.getJSON(url, function(data) {
+    //console.log("상품후기 :" + data.list[0].rew_content);
+    //console.log("페이지넘버 :" + data.pageMaker.total);
+    //review_list
+
+    printReviewList(data.list, $("#review_list"), $("#reviewTemplate"));
+
+    //review_paging
+    printPaging(data.pageMaker, $("#review_paging"));
+
+  });
+}
+
+//상품후기작업함수
+let printReviewList = function(reviewDate , target , template) {
+  let templasteObj = Handlebars.compile(template.html());
+  let reviewHtml = templasteObj(reviewDate);
+
+  //상품후기목록 위치를 참조하여 추가
+  $("#review_list").children().remove();
+  target.append(reviewHtml);
+
+}
+
+//2)페이징 기능작업함수
+let printPaging = function(pageMaker, target) {
+  
+  let pagingStr = '<nav id="navigation" aria-label="Page navigation example">';
+    pagingStr += '<ul class="pagination">';
+
+  
+  //이전표시여부
+  if(pageMaker.prev) {
+    pagingStr += '<li class="page-item"><a class="page-link" href="' + (pageMaker.startPage - 1)  + '">[Prev]</a></li>';
+    
+  }
+  //페이지번호 출력
+  for(let i=pageMaker.startPage; i<=pageMaker.endPage; i++) {
+    let className = pageMaker.cri.pageNum == i ? 'active' : '';
+    pagingStr += '<li class="page-item ' + className + '"><a class="page-link" href="' + i + '">' + i + '</a></li>'
+  }
+
+
+  //다음표시여부
+  if(pageMaker.next) {
+    pagingStr += '<li class="page-item"><a class="page-link" href="' + (pageMaker.startPage + 1)  + '">[Next]</a></li>';
+    
+  }
+  pagingStr += '</ul>';
+  pagingStr += '</nav>';
+
+  target.children().remove();
+  target.append(pagingStr);
+
+
+}
+
+
+//사용자 정의 Helper (핸들바의 함수)
+//상품후기 등록일 milisecond ->자바스크립트의 Date객체로 변환.
+Handlebars.registerHelper("convertDate", function(reviewtime) {
+
+  const dateObj = new Date(reviewtime);
+  let year = dateObj.getFullYear();
+  let month = dateObj.getMonth() + 1;
+  let date = dateObj.getDate();
+  let hour = dateObj.getHours();
+  let minute = dateObj.getMinutes();
+
+  return year + "/" + month + "/" + date + " " + hour + ":" + minute;
+});
+
+//별점 값을 별 텍스트로 변경하기
+Handlebars.registerHelper("convertRating", function(rating) {
+  let starStr = "";
+  switch(rating) {
+    case 1:
+    starStr = "★☆☆☆☆"
+    break;
+    case 2:
+    starStr = "★★☆☆☆"
+    break;
+    case 3:
+    starStr = "★★★☆☆"
+    break;
+    case 4:
+    starStr = "★★★★☆"
+    break;
+    case 5:
+    starStr = "★★★★★"
+    break;
+
+  }
+
+  return starStr;
+});
+
+
+//상품후기 수정/삭제 버튼 표시
+Handlebars.registerHelper("authControlView", function(mbsp_id, rew_num) {
+  let str = "";
+  let login_id = '${sessionScope.loginStatus.mbsp_id}';
+
+  if(login_id == mbsp_id) {
+    str += '<button type="button" name="btn_review_edit" class="btn btn-info" data-rew_num="' + rew_num +'">Edit</button>';
+    str += '<button type="button" name="btn_review_del"  class="btn btn-danger" data-rew_num="' + rew_num +'">Delete</button>';
+  
+  console.log(str);
+  //출력내용이 태그일때 사용
+  return new Handlebars.SafeString(str);
+  }
+
+
+});
+
+//상품후기 삭제버튼 클릭
+$("div#review_list").on("click" ,"button[name='btn_review_del']", function() {
+  //console.log("상품후기 삭제")
+  if(!confirm("상품후기를 삭제하시겠습니까?")) return;
+
+  let rew_num = $(this).data("rew_num");
+
+  $.ajax({
+  url : '/user/review/delete/' + rew_num,
+  headers : {
+    "Content-Type" : "application/json; charset:UTF-8" , "X-HTTP-Method-Override" : "DELETE"
+  },
+  type : 'delete',
+  data : JSON.stringify(rew_num), //object -> json으로 변환
+  dataType : 'text',
+  success : function(result) {
+    if(result == 'success') {
+      alert("상품평이 삭제됨.");
+
+    
+      //상품평 불러오는작업
+
+      url = "/user/review/list/" + "${ProductVO.pro_num}" + "/" + reviewPage;
+      getReviewInfo(url);
+    }
+  }
+});
+});
+
+
+//페이징 번호 클릭
+$("div#review_paging").on("click" , "nav#navigation ul a", function(e) {
+  e.preventDefault();
+  //console.log("페이지 번호");
+
+  reviewPage = $(this).attr("href"); //상품후기 선택 페이지번호
+
+  let url = "/user/review/list/" + "${productVO.pro_num }" + "/" +reviewPage;
+
+  getReviewInfo(url); //스프링에서 상품후기, 페이지번호 데이터 가져오는 함수.
+
+
+});
+
+
+
+
+
+
+
 
 
 //상품후기저장
@@ -350,6 +555,8 @@ $.ajax({
     if(result == 'success') {
       alert("상품평이 등록됨.");
       $('#review_modal').modal('hide'); //부트스트랩 4.6버전의 자바스크립트명령어
+      //상품평 불러오는작업
+      getReviewInfo(url);
     }
   }
 });
