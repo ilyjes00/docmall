@@ -48,5 +48,14 @@
 		WHERE
 			rew_num = #{rew_num}
 	</delete>
+	<update id="review_modify" parameterType="com.docmall.domain.ReviewVO">
+	UPDATE
+		REVIEW_TBL
+	SET
+		REW_CONTENT = #{rew_content}, rew_score = #{rew_score}
+	WHERE
+		rew_num = #{rew_num}
+	
+	</update>
 
   </mapper>

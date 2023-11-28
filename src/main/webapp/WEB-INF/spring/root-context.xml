@@ -43,6 +43,13 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
+	<!-- Transaction 설정 -->
+<tx:annotation-driven transaction-manager="transactionManager" />
+
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="dataSource"/>
+</bean>
+	
 	<!-- service 패키지 -->
 	<context:component-scan base-package="com.docmall.service" />
 	<!-- mapper 패키지 -->

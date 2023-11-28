@@ -13,6 +13,8 @@ public interface ReviewMapper {
 	
 	void review_insert(ReviewVO vo);
 	
+	void review_modify(ReviewVO vo);
+	
 	List<ReviewVO> list(@Param("pro_num")Integer pro_num, @Param("cri") Criteria cri); 	//criteria 에서 검색기능 사용안함. mapper에서만 param하고 서비스에서는 제거
 
 	int listCount(Integer pro_num);

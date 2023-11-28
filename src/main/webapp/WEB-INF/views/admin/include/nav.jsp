@@ -55,7 +55,7 @@
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">주문리스트</a></li>
+            <li><a href="/admin/order/order_list">주문리스트</a></li>
             <li><a href="#">입금대기</a></li>
             <li><a href="#">입금완료</a></li>
             <li><a href="#">배송준비</a></li>
