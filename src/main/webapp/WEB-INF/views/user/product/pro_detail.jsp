@@ -378,9 +378,9 @@ function getReviewInfo(url) {
 }
 
 //상품후기작업함수
-let printReviewList = function(reviewDate , target , template) {
+let printReviewList = function(reviewData , target , template) {
   let templasteObj = Handlebars.compile(template.html());
-  let reviewHtml = templasteObj(reviewDate);
+  let reviewHtml = templasteObj(reviewData);
 
   //상품후기목록 위치를 참조하여 추가
   $("#review_list").children().remove();

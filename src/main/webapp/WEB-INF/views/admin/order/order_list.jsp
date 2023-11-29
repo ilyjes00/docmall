@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -10,35 +10,46 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 23 | Starter</title>
+  <title>AdminLTE 2 | Starter</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<%@ include file="/WEB-INF/views/admin/include/plugin1.jsp" %>
+  
+  <%@include file="/WEB-INF/views/admin/include/plugin1.jsp" %>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
   <script id="orderDetailTemplate" type="text/x-handlebars-template">
-    <table class="table table-sm">
-       <thead>
-          <tr>
-             <th scope="col">번호</th>
-             <th scope="col">리뷰내용</th>
-             <th scope="col">평점</th>
-             <th scope="col">날짜</th>
-             <th scope="col">비고</th>
-          </tr>
-       </thead>
-       <tbody>
-          {{#each .}}
-          <tr>
-             <th scope="row" class="rew_num">{{rew_num}}</th>
-             <td class="rew_content">{{rew_content}}</td>
-             <td class="rew_score">{{convertRating rew_score}}</td>
-             <td class="rew_regdate">{{convertDate rew_regdate}}</td>
-             <td>{{authControlView mbsp_id rew_num rew_score}}</td>
-          </tr>
-          {{/each}}
-       </tbody>
-    </table>
-  </script>
+    <tr class="tr_detail_info" >
+      <td colspan="9">
+        <table class="table table-sm">
+          <caption style="display :table-caption; text-align: center;color: red;font-weight: bold;"> [주문상세정보] </caption>
+          <thead>
+            <tr>
+              <th scope="col">주문번호</th>
+              <th scope="col">상품코드</th>
+              <th scope="col">상품이미지</th>
+              <th scope="col">상품명</th>
+              <th scope="col">주문수량</th>
+              <th scope="col">주문금액</th>
+              <th scope="col">비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each .}}
+            <tr>
+              <th scope="row">{{ord_code}}</th>
+              <td>{{pro_num}}</td>
+              <td><img src='/admin/order/imageDisplay?dateFolderName={{pro_up_folder}}&fileName={{pro_img}}'></td>
+              <td>{{pro_name}}</td>
+              <td>{{dt_amount}}</td>
+              <td>{{ord_price}}</td>
+              <td>{{ord_code}}</td>
+              <td><button type="button" name="btn_order_delete" class="btn btn-danger" data-ord_code="{{ord_code}}" data-pro_num="{{pro_num}}">delete</button></td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </td>
+    </tr>
+</script>
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -64,9 +75,9 @@ desired effect
 <div class="wrapper">
 
   <!-- Main Header -->
-	<%@ include file="/WEB-INF/views/admin/include/header.jsp" %>
+  <%@ include file="/WEB-INF/views/admin/include/header.jsp" %>
   <!-- Left side column. contains the logo and sidebar -->
-    <%@ include file="/WEB-INF/views/admin/include/nav.jsp" %>
+  <%@ include file="/WEB-INF/views/admin/include/nav.jsp" %>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -85,126 +96,110 @@ desired effect
     <!-- Main content -->
     <section class="content container-fluid">
 
-             <div class="row">
-              <div class="col-md-12">  		
-              <div class="box">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Order List</h3>
-                    </div>				
-                    <div class="col-6">
-                    <form action="/admin/order/order_list" method="get">
-                      <select name="type">
-                        <option selected>검색종류선택</option>
-                        <option value="N" ${pageMaker.cri.type == 'N'? 'selected': ''}>상품명</option>
-                        <option value="C"${pageMaker.cri.type == 'C'? 'selected': ''}>상품코드</option>
-                        <option value="P"${pageMaker.cri.type == 'P'? 'selected': ''}>제조사</option>
-                        <option value="NP"${pageMaker.cri.type == 'NP'? 'selected': ''}>상품명 or 제조사</option>
-                        </select>
-                        <input type="text" name="keyword" value="${pageMaker.cri.keyword }" />
-                        <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }" />
-                        <input type="hidden" name="amount" value="${pageMaker.cri.amount }" />
-                        <button type="submit" class="btn btn-dark">검색</button>
-                      </form>		
-                      </div>
-                        <div class="box-body">
-                        <table class="table table-bordered">
-                        <tbody><tr>
-                          <th style="width: 2%"><input type="checkbox" id="checkAll"></th>
-                        <th style="width: 8%">번호</th>
-                        <th	style="width: 10%">주문일시</th>
-                        <th	style="width: 10%">주문번호</th>
-                        <th style="width: 15%">배송비</th>
-                        <th style="width: 15%">주문상태</th>
-                        <th style="width: 10%">주문자</th>
-                        <th style="width: 10%">총주문액</th>
-                        <th style="width: 10%">결제상태</th>
-                        <th style="width: 10%">비고</th>
-                        </tr>
-                        <c:forEach items="${order_list }" var="orderVO">
-                        <tr>
-                        <td><input type="checkbox" name="check" value="${orderVO.ord_code }"></td>
-                        <td>번호</td>
-                        <td>
-                          <fmt:formatDate value="${orderVO.ord_regdate}" pattern="yyyy-MM-dd hh:mm:ss" />
-                        </td>
-                        <td><span class="btn_order_detail">${orderVO.ord_code }</span></td>
-                        <td>0</td>
-                        <td>
-                          주문상태
-                        </td>
-                        <td>${orderVO.ord_name}</td>
-                        <td>${orderVO.ord_price}</td>
-                        <td>${orderVO.payment_status}</td>
-                        <td><button type="button" class="btn btn-info btn_order_detail" data-ord_code="${orderVO.ord_code }">주문상세버튼</button></td>
-                        </tr>
-                        </c:forEach>
-                        </tbody></table>								
-                        </div> 
+      <div class="row">
+    		<div class="col-md-12">
+    			<div class="box">
+					<div class="box-header with-border">
+					<h3 class="box-title">Order List</h3>
+					</div>
 
-                        <div class="box-footer clearfix">
-                          <div class="row">
-                             <div class="col-md-2">
-                                <button type="button" class="btn btn-primary" id="btn_check_modify2" role="button">체크상품수정</button>   
-                             <!--1)페이지번호 클릭할 때 사용  [이전]  1   2   3   4   5 [다음]  -->
-                             <!--2)목록에서 상품이미지 또는 상품명 클릭할 때 사용   -->
-                               <form id="actionForm" action="" method="get">
-                                <input type="hidden" name="pageNum" id="pageNum" value="${pageMaker.cri.pageNum}" />
-                                <input type="hidden" name="amount"  id="amount" value="${pageMaker.cri.amount}" />
-                                <input type="hidden" name="type" id="type" value="${pageMaker.cri.type}" />
-                                <input type="hidden" name="keyword" id="keyword" value="${pageMaker.cri.keyword}" />
-                               </form>
-                             </div>
-                             <div class="col-md-8 text-center">
-                                <nav aria-label="...">
-                                <ul class="pagination">
-                                   <!-- 이전 표시여부 -->
-                                   <c:if test="${pageMaker.prev }">
-                                      <li class="page-item">
-                                         <a href="${pageMaker.startPage - 1 }" class="page-link movepage">Previous</a>
-                                      </li>
-                                   </c:if>
-                                   <!-- 페이지번호 출력 -->
-                                   <!-- 1   2   3   4   5 6   7   8   9   10  [다음] -->
-                                   <!-- [이전] 11   12   13   14   15 16   17   18   19   20   -->
-                                   <c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="num">
-                                      <li class='page-item ${pageMaker.cri.pageNum ==  num ? "active":"" }'aria-current="page">
-                                         <a class="page-link movepage" href="${num }" data-page="${num }">${num }</a>
-                                      </li>
-                                   </c:forEach>
-                                   
-                                   <!--  다음 표시여부 -->
-                                   <c:if test="${pageMaker.next }">
-                                      <li class="page-item">
-                                      <a href="${pageMaker.endPage + 1 }" class="page-link movepage" href="#">Next</a>
-                                      </li>
-                                   </c:if>
-                                   
-                                </ul>
-                                </nav>
-                             </div>
-                             <div class="col-md-2 text-right"><button type="button" class="btn btn-primary" id="btn_pro_insert"  role="button">상품등록</button></div>
-                          </div>
-                          
-                       </div>
-                      <div class="col-6">
-
-                        <!-- [이전] 1 	2 	3	4	5	[다음] 페이지 이동목적으로 클릭할 때 사용-->
-                        <form id="actionForm" action="" method="get">
-                          <input type="hidden" name="pageNum" id="pageNum" value="${pageMaker.cri.pageNum }" />
-                          <input type="hidden" name="amount" id="amount" value="${pageMaker.cri.amount }" />
-                          <input type="hidden" name="type" id="type" value="${pageMaker.cri.type }" />
-                          <input type="hidden" name="keyword" id="keyword" value="${pageMaker.cri.keyword }" />
-                        </form>
-                      </div>
-                    </div>
-                      <a class="btn btn-primary" href="" role="button">글쓰기</a>
-                    
-                       </div>												
-                </div>
-           </div>				
-            </div>	  		  		
-          
-</div>
+					<div class="box-body">
+						<div>
+							<form action="/admin/order/order_list" method="get" >
+									<select name="type">
+										<option selected>검색종류선택</option>
+										<option value="N" ${pageMaker.cri.type == 'N'? 'selected': ''}>주문자</option>
+										<option value="C" ${pageMaker.cri.type == 'C'? 'selected': ''}>주문코드</option>
+									</select>
+									<input type="text" name="keyword" value="${pageMaker.cri.keyword}" />
+									<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
+									<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
+									<button type="submit" class="btn btn-primary">검색</button>
+							</form>
+						</div>
+						<table class="table table-bordered" id="order_info_tbl">
+							<tbody><tr>
+								<th style="width: 8%">번호</th>
+								<th style="width: 10%">주문일시</th>
+								<th style="width: 10%">주문번호</th>
+								<th style="width: 15%">배송비</th>
+								<th style="width: 15%">주문상태</th>
+								<th style="width: 10%">주문자</th>
+								<th style="width: 10%">총주문액</th>
+								<th style="width: 10%">결제상태</th>
+                				<th style="width: 10%">비고</th>
+							</tr>
+							<c:forEach items="${order_list }" var="orderVO">
+							<tr>
+								<td>번호</td>
+								<td>
+									<fmt:formatDate value="${orderVO.ord_regdate }" pattern="yyyy-MM-dd hh:mm:ss" />
+								</td>
+								<td><span class="btn_order_detail">${orderVO.ord_code }</span></td>
+								<td>0</td>
+								<td>
+									주문상태
+								</td>
+								<td>${orderVO.ord_name}</td>
+								<td>${orderVO.ord_price}</td>
+								<td>${orderVO.payment_status}</td>
+                				<td>
+                					<button type="button" class="btn btn-info btn_order_detail1" data-ord_code="${orderVO.ord_code }">주문상세1</button>
+                				</td>
+                				<td>
+                					<button type="button" class="btn btn-info btn_order_detail2" data-ord_code="${orderVO.ord_code }">주문상세2</button>
+                				</td>
+							</tr>
+							</c:forEach>
+							</tbody></table>
+					</div>
+					<div class="box-footer clearfix">
+						<div class="row">
+							<div class="col-md-4">
+							<!--1)페이지번호 클릭할 때 사용  [이전]  1	2	3	4	5 [다음]  -->
+							<!--2)목록에서 상품이미지 또는 상품명 클릭할 때 사용   -->
+							  <form id="actionForm" action="" method="get">
+								<input type="hidden" name="pageNum" id="pageNum" value="${pageMaker.cri.pageNum}" />
+								<input type="hidden" name="amount"  id="amount" value="${pageMaker.cri.amount}" />
+								<input type="hidden" name="type" id="type" value="${pageMaker.cri.type}" />
+								<input type="hidden" name="keyword" id="keyword" value="${pageMaker.cri.keyword}" />
+								
+							  </form>
+							</div>
+							<div class="col-md-6 text-center">
+								<nav aria-label="...">
+								<ul class="pagination">
+									<!-- 이전 표시여부 -->
+									<c:if test="${pageMaker.prev }">
+										<li class="page-item">
+											<a href="${pageMaker.startPage - 1 }" class="page-link movepage">Previous</a>
+										</li>
+									</c:if>
+									<!-- 페이지번호 출력 -->
+									<!-- 1	2	3	4	5 6	7	8	9	10  [다음] -->
+									<!-- [이전] 11	12	13	14	15 16	17	18	19	20   -->
+									<c:forEach begin="${pageMaker.startPage }" end="${pageMaker.endPage }" var="num">
+										<li class='page-item ${pageMaker.cri.pageNum ==  num ? "active":"" }'aria-current="page">
+											<a class="page-link movepage" href="${num }" data-page="${num }">${num }</a>
+										</li>
+									</c:forEach>
+									
+									<!--  다음 표시여부 -->
+									<c:if test="${pageMaker.next }">
+										<li class="page-item">
+										<a href="${pageMaker.endPage + 1 }" class="page-link movepage" href="#">Next</a>
+										</li>
+									</c:if>
+									
+								</ul>
+								</nav>
+							</div>
+						</div>
+						
+					</div>
+			   </div>
+    		</div>
+    	</div>
 
     </section>
     <!-- /.content -->
@@ -212,7 +207,8 @@ desired effect
   <!-- /.content-wrapper -->
 
   <!-- Main Footer -->
-    	<%@ include file="/WEB-INF/views/admin/include/footer.jsp" %>
+  <%@include file="/WEB-INF/views/admin/include/footer.jsp" %>
+
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Create the tabs -->
@@ -293,169 +289,115 @@ desired effect
 <!-- ./wrapper -->
 
 <!-- REQUIRED JS SCRIPTS -->
-<%@ include file="/WEB-INF/views/admin/include/plugin2.jsp" %>
+<%@include file="/WEB-INF/views/admin/include/plugin2.jsp" %>
+
 <script>
-  $(document).ready(function (){
+  $(document).ready(function() {
 
     let actionForm = $("#actionForm");
 
-   // <!--[이전] 1 2 3 4 5 [다음] 클릭 이벤트 설정--> <a>태그
-   $(".movepage").on("click", function(e) {
-      e.preventDefault(); //a태그의 링크기능을 제거. href속성에 페이지번호를 숨겨둠
+    // [이전] 1 2 3 4 5 [다음] 클릭 이벤트 설정. <a>태그
+    $(".movepage").on("click", function(e) {
+      e.preventDefault(); // a태그의 href 링크기능을 제거. href속성에 페이지번호를 숨겨둠.
 
       actionForm.attr("action", "/admin/order/order_list");
       actionForm.find("input[name='pageNum']").val($(this).attr("href"));
 
-
-      actionForm.submit();
-   });
-
-   //목록에서 제목행 체크박스 선택
-// 목록에서 제목행 체크박스 선택
-$("#checkAll").on("click", function() {
-  let checked = this.checked;
-  $("input[name='check']").prop("checked", checked);
-});
-
-
-   //목록에서 데이터행 체크박스 선택
-   $("input[name='check']").on("click", function() {
-  let allChecked = true;
-  $("input[name='check']").each(function() {
-    if (!$(this).is(":checked")) {
-      allChecked = false;
-    }
-  });
-  $("#checkAll").prop("checked", allChecked);
-});
-
-
-   //체크박스 수정1 상태클릭
-   $("#btn_check_modify2").on("click", function(){
-    //체크박스 유무확인
-    if($("input[name='check']").length == 0) {
-    alert("수정할 상품을 체크하세요.");
-    return;
-    }
-
-    //배열문법
-    let pro_num_arr = []; //체크된 상품코드 배열
-    let pro_price_arr = []; //체크된 상품가격 배열
-    let pro_buy_arr = []; //체크된 상품진열 배열
-
-    $("input[name='check']:checked").each(function() {
-      pro_num_arr.push($(this).val());
-      pro_price_arr.push($(this).parent().parent().find("input[name='pro_price']").val());
-      pro_buy_arr.push($(this).parent().parent().find("select[name='pro_buy']").val());
+       actionForm.submit();
     });
+    
+  // 주문상세 방법1 이벤트
+  $(".btn_order_detail1").on("click", function() {
+    
+    let cur_tr = $(this).parent().parent();
+    let ord_code = $(this).data("ord_code");
 
-    console.log("상품코드" , pro_num_arr);
-    console.log("상품코드" , pro_price_arr);
-    console.log("상품코드" , pro_buy_arr);
+    //console.log("주문번호", ord_code);
 
-    $.ajax({
-    url: '/admin/product/pro_checked_modify2',
-    type: 'post',
-    data: {pro_num_arr: pro_num_arr, pro_price_arr: pro_price_arr, pro_buy_arr: pro_buy_arr},
-    dataType: 'text',
-    success: function(result) {
-      if(result == "success") {
-        alert("체크상품이 수정되었습니다.");
-
-        //db에서 다시불러오는 작업
-        //1) location.href = "/admin/product/pro_list"
-        //2) 현재 리스트 상태로 불러오는 의미
-        /*
-        actionForm.attr("method","get");
-        actionForm.attr("action","/admin/product/pro_list");
-        actionForm.submit();
-        */
-      }
-      }
-   });   
-   });
-   //상품등록
-   $("#btn_pro_insert").on("click", function(){
-    location.href = "/admin/product/pro_insert";
+    let url = "/admin/order/order_detail_info1/" + ord_code;
+    getOrderDetailInfo(url, cur_tr);
   });
 
-  //상품수정
-  $("button[name='btn_pro_edit']").on("click", function(){
-    //수정상품코드
-    let pro_num = $(this).parent().parent("tr").find("input[name='check']").val();
+  function getOrderDetailInfo(url,cur_tr) {
+    $.getJSON(url, function(data) {
 
-    console.log(pro_num);
+      // data : 주문상세정보
+      //console.log("상세정보", data[0].ord_code);
 
-    //뒤로가기 클릭후 다시 수정버튼 클릭시 코드 중복되는부분제거
-    actionForm.find("input[name='pro_num']").remove();
-
-    //<input type="hidden" name="pro_num" id="pro_num" value="24"/>
-
-    actionForm.append('<input type="hidden" name="pro_num" id="pro_num" value="' + pro_num + '" />');
+      printOrderDetailList(data, cur_tr, $("#orderDetailTemplate"))
 
 
-    actionForm.attr("method","get");
-        actionForm.attr("action","/admin/product/pro_edit");
-        actionForm.submit();
-  });
-  //상품삭제 , 화살표함수사용시 상품코드 접근불가능
-  /*
-    $(".btn_pro_del").on("click", () =>{
-    let pro_num = $(this).parent().parent().find("input[name='check']").val();
-    console.log("상품코드", pro_num);
-  })
-  */
-  $("button[name='btn_pro_del']").on("click", function(){
+    });
+  }
 
-    let pro_name = $(this).parent().parent().find(".pro_name").text();
-    if(!confirm(pro_name + " 상품을 삭제하시겠습니까?")) return;
+  let printOrderDetailList = function(orderDetailData, target, template) {
+      let templateObj = Handlebars.compile(template.html());
+      let orderDetailHtml = templateObj(orderDetailData);
 
-    let pro_num = $(this).parent().parent().find("input[name='check']").val();
+        //상품후기목록 위치를 참조하여, 추가
+        // target.children().remove(); 
+        target.parent().find(".tr_detail_info").remove();
+        target.after(orderDetailHtml);
+  }
+  //주문상세에서 개별삭제
+  $("table#order_info_tbl").on("click", "button[name='btn_order_delete']", function() {
 
-    console.log("상품코드", pro_num);
+    //console.log("삭제");
 
+    //주문상세테이블은 primary key가 2개컬럼을 대상으로 복합키 설정이 되어있다.
+    let ord_code = $(this).data("ord_code");
+    let pro_num  = $(this).data("pro_num");
 
-//뒤로가기 클릭후 다시 수정버튼 클릭시 코드 중복되는부분제거
-    actionForm.find("input[name='pro_num']").remove();
+    if(!confirm("상품코드" + pro_num + "번을 삭제하시겠습니까?")) return;
 
-    actionForm.append('<input type="hidden" name="pro_num" id="pro_num" value="' + pro_num + '" />');
+    //<input type='hidden' name='ord_code' value=''>
 
-    actionForm.attr("method","post");
-    actionForm.attr("action","/admin/product/pro_delete");
+    actionForm.append("<input type='hidden' name='ord_code' value='" + ord_code + "'>");
+    actionForm.append("<input type='hidden' name='pro_num' value='" + pro_num + "'>");
+
+    actionForm.attr("action", "/admin/order/order_product_delete");
     actionForm.submit();
 
-});
+  });
+ // 주문상세 방법2 이벤트
+ $(".btn_order_detail2").on("click", function() {
+    
+    //let cur_tr = $(this).parent().parent();
+    let ord_code = $(this).data("ord_code");
 
-    //주문상세 이벤트
-    $(".btn_order_detail").on("click", function() {
+    //console.log("주문번호", ord_code);
 
-      let cur_tr = $(this).parent().parent();
-      let ord_code = $(this).data("ord_code");
-      console.log ("주문번호", ord_code);
-    });
+    let url = "/admin/order/order_detail_info2/" + ord_code;
 
-
-    let url = "/admin/order/order_detail_info/" + ord_code;
-    getOrderDetailInfo(url);
-
-    function getOrderDetailInfo(url) {
-  $.getJSON(url, function(data) {
-    //console.log("상품후기 :" + data.list[0].rew_content);
-    //console.log("페이지넘버 :" + data.pageMaker.total);
-    //review_list
-
-    printOrderDetailList(data.list, $(cur_tr), $("#orderDetailTemplate"));
-
+    $("#order_detail_content").load(url);
+    //modal() : 부트스트랩 4.6 메서드
+    $("#order_detail_modal").modal('show');
 
   });
-}
+  
 
 
-
-  //ready 이벤트
-
-
-  });
+}); // ready 이벤트
 </script>
+<div class="modal fade" id="order_detail_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body" id="order_detail_content">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
 </body>
 </html>

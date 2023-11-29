@@ -142,7 +142,7 @@
         dataType: 'Text',
         success: function(result) {
           if(result == 'success') {
-            console.log("수량 변경이 성공적으로 반영되었습니다.");
+            alert("수량 변경이 성공적으로 반영되었습니다.");
 
             //금액 = 판매가 - (판매가 * 할인율) * 수량
             let unitprice = cur_btn_change.parent().parent().find("span#unitprice").text();
@@ -203,6 +203,28 @@
         });
     
   });
+
+      //제목행 체크박스 선택
+      let isCheck = true;
+      $("#checkAll").on("click", function() {
+        //데이터 행 checkbox
+        $(".check").prop("checked", this.checked);
+
+        isCheck = this.checked;
+      });
+
+      //데이터행 체크박스 선택
+      $(".check").on("click", function(){
+        //제목행 체크박스
+        $("#checkAll").prop("checked", this.checked);
+
+        //데이터행의 체크박스 상태를 확인.
+        $(".check").each(function() {
+          if(!$(this).is(":checked")) {
+            $("#checkAll").prop("checked", false);
+          }
+        });
+      });
 
   function fn_cart_sum_price() {
                 //전체주문금액
