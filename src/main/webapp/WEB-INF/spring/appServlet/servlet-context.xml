@@ -60,6 +60,57 @@
 	<beans:constructor-arg value="c:\\dev\\upload\\ckeditor\\"></beans:constructor-arg>
 	</beans:bean>
 	
+	<!-- 인터셉터 설정 -->
+	<beans:bean id="testInterceptor" class="com.docmall.interceptor.TestInterceptor"></beans:bean>
+	
+	<interceptors>
+		<interceptor>
+		<mapping path="/test/testA"/>
+		<mapping path="/test/testB"/>
+		<beans:ref bean="testInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
+	<!--  userInterceptor 인터셉터 작업 -->
+		<beans:bean id="userInterceptor" class="com.docmall.interceptor.UserInterceptor"></beans:bean>
+	
+	<interceptors>
+		<interceptor>
+		
+		<!-- <mapping path="/member/*"/>
+			 <exclude-mapping path=""/> -->
+			 
+		<!-- Getmapping 위주로 확인하면됨 -->
+			<mapping path="/member/confirmPw"/> <!--  ex / member전체카테고리에서  exclue-mapping으로 제외할 경로를 따로 지정해준다 ex ) /member/delConfirmPw -->
+			<mapping path="/member/modify"/>
+			<mapping path="/member/delConfirmPw"/>
+			<mapping path="/member/mypage"/>
+			<!-- Order -->
+			<mapping path="/user/order/*"/>
+			<!-- Cart -->
+			<mapping path="/user/Cart/*"/>
+			<mapping path="/user/Cart/**"/>
+		    <!-- exclude-mapping을 사용하더라도 mapping보다 우선사용되면 작동을안한다. -->
+		<beans:ref bean="userInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
+		<!--  adminInterceptor 인터셉터 작업 -->
+		<beans:bean id="adminInterceptor" class="com.docmall.interceptor.AdminInterceptor"></beans:bean>
+	
+	<interceptors>
+		<interceptor>
+			 
+		<!-- Getmapping 위주로 확인하면됨 -->
+			<mapping path="/admin/**"/> <!--  ex / member전체카테고리에서  exclue-mapping으로 제외할 경로를 따로 지정해준다 ex ) /member/delConfirmPw -->
+			<exclude-mapping path="/admin/intro"/>
+			<exclude-mapping path="/admin/admin_ok"/>
+
+		    <!-- exclude-mapping을 사용하더라도 mapping보다 우선사용되면 작동을안한다. -->
+		<beans:ref bean="adminInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
 	
 	
 </beans:beans>

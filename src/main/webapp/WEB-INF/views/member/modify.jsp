@@ -236,6 +236,10 @@
                            url: '/member/idCheck', // url : '아이디'를 체크하는 매핑주소
                            type: 'get', // get or post
                            dataType: 'text', // <String>
+                           //인스펙터에서 ajax구문에 에러를보내는데 받기위한 작업
+                           beforeSend: function(xhr) {
+                           xhr.setRequestHeader("AJAX" , "true");
+                           },
                            data: { mbsp_id: $("#mbsp_id").val() }, // data: {파라미터명: 데이터 값}
                            success: function (result) { // success: function (매개변수명) { 
                               if (result == "yes") {
@@ -248,7 +252,12 @@
                                  $("#mbsp_id").val(""); // 아이디 텍스트 박스의 값을 지움
                                  $("#mbsp_id").focus(); // 포커스 기능
                               }
-                           }
+                           },
+                           error : function(xhr, status, error) {
+                           alert(status);
+                           alert("로그인 페이지로 이동합니다.");
+                           location.href="/member/login";
+                        }
                         });
                      });
                      // 메일 인증 요청
@@ -263,12 +272,21 @@
                            url: '/email/authCode', // @GetMapping("/authCode")
                            type: 'get',
                            dataType: 'text', // 스프링에서 보내는 데이터의 타입 ─ <String> -> "success" -> text
+                           //인스펙터에서 ajax구문에 에러를보내는데 받기위한 작업
+                           beforeSend: function(xhr) {
+                           xhr.setRequestHeader("AJAX" , "true");
+                           },
                            data: { receiverMail: $("#mbsp_email").val() }, // EmailDTO ─ private String receiverMail;
                            success: function (result) {
                               if (result == "success") {
                                  alert("인증 메일이 발송되었습니다. 메일 확인 바랍니다.")
                               }
-                           }
+                           },
+                           error : function(xhr, status, error) {
+                           alert(status);
+                           alert("로그인 페이지로 이동합니다.");
+                           location.href="/member/login";
+                        }
                         });
                      });
 
@@ -288,6 +306,10 @@
                            url: '/email/confirmAuthcode',
                            type: 'get',
                            dataType: 'text', // / 스프링에서 보내는 데이터의 타입 ─ <String>
+                           //인스펙터에서 ajax구문에 에러를보내는데 받기위한 작업
+                           beforeSend: function(xhr) {
+                           xhr.setRequestHeader("AJAX" , "true");
+                           },
                            data: { authCode: $("#authCode").val() },
                            success: function (result) {
                               if (result == "success") {
@@ -302,7 +324,12 @@
                                  $("#authCode").val("");
                                  isConfirmAuth = false;
                               }
-                           }
+                           },
+                           error : function(xhr, status, error) {
+                           alert(status);
+                           alert("로그인 페이지로 이동합니다.");
+                           location.href="/member/login";
+                        }
                         });
                      });
 

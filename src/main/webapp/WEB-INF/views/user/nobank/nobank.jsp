@@ -54,7 +54,7 @@
 <div class="container">
   <div class="box box-primary">
   	<div class="box-body">
-        <h3>주문처리가 되었읍니다.</h3>
+        <h3>주문처리가 되었습니다.</h3>
       </div>
 	</div>
   <%@include file="/WEB-INF/views/comm/footer.jsp" %>

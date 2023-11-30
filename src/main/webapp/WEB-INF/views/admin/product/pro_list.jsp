@@ -335,6 +335,10 @@ $("#checkAll").on("click", function() {
     type: 'post',
     data: {pro_num_arr: pro_num_arr, pro_price_arr: pro_price_arr, pro_buy_arr: pro_buy_arr},
     dataType: 'text',
+    //인스펙터에서 ajax구문에 에러를보내는데 받기위한 작업
+    beforeSend: function(xhr) {
+    xhr.setRequestHeader("AJAX" , "true");
+    },
     success: function(result) {
       if(result == "success") {
         alert("체크상품이 수정되었습니다.");
@@ -348,7 +352,12 @@ $("#checkAll").on("click", function() {
         actionForm.submit();
         */
       }
-      }
+      },
+        error : function(xhr, status, error) {
+          alert(status);
+          alert("관리자 로그인 페이지로 이동합니다.");
+          location.href="/admin/intro";
+        }
    });   
    });
    //상품등록

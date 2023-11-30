@@ -380,12 +380,21 @@
             totalprice: $("#cart_total_price").text(),
           },
           dataType: 'json',
+          //인스펙터에서 ajax구문에 에러를보내는데 받기위한 작업
+          beforeSend: function(xhr) {
+          xhr.setRequestHeader("AJAX" , "true");
+          },
           success : function(response) {
             console.log("응답: " + response);
 
             alert(response.next_redirect_pc_url);
             location.href = response.next_redirect_pc_url;
-          }
+          },
+          error : function(xhr, status, error) {
+          alert(status);
+          alert("로그인 페이지로 이동합니다.");
+          location.href="/member/login";
+        }
 
         });
 
@@ -408,6 +417,11 @@
             pay_memo: $("#pay_memo").val()
           },
           dataType: 'text',
+
+          //인스펙터에서 ajax구문에 에러를보내는데 받기위한 작업
+          beforeSend: function(xhr) {
+          xhr.setRequestHeader("AJAX" , "true");
+          },
           success : function(result) {
             console.log("응답: " + result);
             
@@ -415,8 +429,12 @@
               alert("무통장입금으로 주문이 완료가 되었읍니다.");
               location.href = '/user/order/orderComplete';
             }
-          }
-
+          },
+          error : function(xhr, status, error) {
+          alert(status);
+          alert("로그인 페이지로 이동합니다.");
+          location.href="/member/login";
+        }
         });
       }
     });
