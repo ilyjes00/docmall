@@ -128,6 +128,7 @@ desired effect
                     <div class="col-sm-4">
                       <input type="file" class="form-control" name="uploadFile" id="uploadFile">
                       <!--상품이미지 변경시 기존이미지 삭제를 위하여, 사용됨-->
+                      <input type="hidden" name="pro_img" value="${productVO.pro_up_folder }">
                       <input type="hidden" name="pro_img" value="${productVO.pro_img }">
                     </div>
                     <label for="title" class="col-sm-1 col-form-label ">미리보기 이미지</label>

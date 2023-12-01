@@ -119,6 +119,7 @@ if(msg == 'success') {
 }
 </script>
 <%@include file="/WEB-INF/views/comm/plugin.jsp" %>
+<!-- js경로를 사용하려면 , servlet-context.xml파일에서 <resource>설정해야 사용가능하다-->
 <script src="/js/category_menu.js"></script>
 
   </body>

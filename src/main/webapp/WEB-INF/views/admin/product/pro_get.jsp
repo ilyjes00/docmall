@@ -64,10 +64,10 @@ desired effect
               <div class="col-md-12">  		
               <div class="box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Product List</h3>
+                  <h3 class="box-title">Product view</h3>
                     </div>				
                     <div class="col-6">
-                    <form action="/admin/product/pro_list" method="get">
+                    <form action="" method="get">
                       <select name="type">
                         <option selected>검색종류선택</option>
                         <option value="N" ${pageMaker.cri.type == 'N'? 'selected': ''}>상품명</option>
@@ -280,34 +280,18 @@ desired effect
    $(".movepage").on("click", function(e) {
       e.preventDefault(); //a태그의 링크기능을 제거. href속성에 페이지번호를 숨겨둠
 
-      
       actionForm.attr("action", "/admin/product/pro_list");
       actionForm.find("input[name='pageNum']").val($(this).attr("href"));
 
 
       actionForm.submit();
    });
+   $("a.move").on("click", function(e) {
+    e.preventDefault();
 
-
-     //상품수정
-  $("a.move").on("click", function(){
-    //수정상품코드
-    let pro_num = $(this).parent().parent("tr").find("input[name='check']").val();
-
-    console.log(pro_num);
-
-    //뒤로가기 클릭후 다시 수정버튼 클릭시 코드 중복되는부분제거
-    actionForm.find("a.move").remove();
-
-    //<input type="hidden" name="pro_num" id="pro_num" value="24"/>
-
-    actionForm.append('<input type="hidden" name="pro_num" id="pro_num" value="' + pro_num + '" />');
-
-
-    actionForm.attr("method","get");
-        actionForm.attr("action","/admin/product/pro_get");
-        actionForm.submit();
-  });
+    actionForm.attr("action" , "/admin/product/pro_get");
+    actionForm.append;
+   })
 
    //목록에서 제목행 체크박스 선택
 // 목록에서 제목행 체크박스 선택
@@ -433,7 +417,6 @@ $("#checkAll").on("click", function() {
     actionForm.submit();
 
 });
-
 
   //ready 이벤트
   });

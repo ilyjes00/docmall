@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 /*
+ 컨트롤러의 매핑주소 요청이 넘어가기전 , 이클래스가 동작이된다.
  지정한 패키지 {com.docmall.controller} 에서 반복적으로 사용하는 Model 데이터작업을 
  아래 클래스에서 한번만 정의를해서 사용할때
  매번 요청이 발생될 때마다 클래스가 동작된다.(중요)
@@ -32,6 +33,9 @@ public class GlobalControllerAdvice {
 		
 		log.info("1차카테고리 리스트");
 		
+		
+		//사용자의 1차카테고리 표시참조. 관리자: 상품등록 : 1차카테고리 표시참조.
+		//너무남용하면 서버과부하가 오니 남발해서 사용하면 안된다.
 		List<CategoryVO> firstCategoryList = adCategoryService.getFirstCategoryList();
 		model.addAttribute("firstCategoryList", firstCategoryList);
 	}

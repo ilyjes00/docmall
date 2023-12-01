@@ -50,9 +50,10 @@ public class FileUtils {
 
       //예> "C:/dev/upload"  "2023/11/02" 폴더경로가 없으면 , 폴더명을 생성하라
       if(file.exists() == false) {
-         file.mkdirs();
+         file.mkdirs(); //주의할것 file.mkdir 을 사용하면안됨
       }
 
+      //클라이언트에서 전송한 원본파일명
       String clientFileName = uploadFile.getOriginalFilename();
 
       //파일명을 중복방지를 위하여 고유한 이름에 사용하는 UUID

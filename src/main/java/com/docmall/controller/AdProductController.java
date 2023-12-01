@@ -158,7 +158,7 @@ public class AdProductController {
 	   }
 	   
    }
-   //상품리스트	(목록과페이징)
+   //상품리스트	(목록과페이징) .. 메서드의 파라미터를 스프링에서 자동으로 객체생성을 해준다.
    @GetMapping("/pro_list")
    public void pro_list(Criteria cri, Model model) throws Exception {
 	   
@@ -234,7 +234,7 @@ public class AdProductController {
 
    }
    // 상품수정 폼페이지
-   @GetMapping("/pro_edit")
+   @GetMapping({"/pro_edit" , "/pro_get"})
    public void pro_edit(@ModelAttribute("cri") Criteria cri, Integer pro_num, Model model)throws Exception{
 	   
 	   //선택한 상품정보
@@ -247,9 +247,9 @@ public class AdProductController {
 	   // 1차 전체카테고리 GlobalControllerAdvice 클래스 Model 참조
 	   
 	   // 상품카테고리에서 2차카테고리를 이용한 1차카테고리 정보를 참조.
-	   // productVO.getCg_code() : 상품테이블에 있는 2차카테고리 코드
+	   // productVO.getCg_code() : 상품테이블에 있는 2차카테고리 코드의 부모인 1차카테고리 정보를 가져오는 작업
 	   CategoryVO firstCategory = adCategoryService.get(productVO.getCg_code());
-	   model.addAttribute("first_category", adCategoryService.get(productVO.getCg_code()));
+	   model.addAttribute("first_category", firstCategory);
 	   
 	   //1차카테고리 부모로 둔 2차카테고리 정보. EX> TOP(1) : 
 	   //현재 상품의 1차카테고리 코드 firstCategory.getCg_parent_code()

@@ -4,8 +4,11 @@ package com.docmall.domain;
 // cg_code,cg_parent_code,cg_name
 //@Data
 
+
 public class CategoryVO {
 
+	//테이블의 컬럼명과 필드명을 동일하게함
+	// 동일하지 않게하러면, 1) 컬렴명  as 별칭,  2) mybatis resultMap 사용으로 대체 
 	private Integer cg_code; // 1, 2차 모든카테고리코드
 	private Integer cg_parent_code;	//1차 카테고리코드
 	private String cg_name;

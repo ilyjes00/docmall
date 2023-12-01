@@ -17,7 +17,6 @@ import lombok.extern.log4j.Log4j;
 public class AdCategoryServiceImpl implements AdCategoryService {
 
 	private final AdCategoryMapper adCategoryMapper;
-	private final AdProductMapper adProductMapper;
 
 	@Override
 	public List<CategoryVO> getFirstCategoryList() {
